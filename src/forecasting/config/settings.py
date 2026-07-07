@@ -5,7 +5,7 @@ import tomllib
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
 
 
 @dataclass(frozen=True)
@@ -21,7 +21,7 @@ class Config:
 
     start_date: str = "2010-01-01"
     end_date: str = "2025-12-31"
-    monthly_rule: str = "M"
+    monthly_rule: str = "ME"
 
     treat_zero_as_missing_for_indicators: bool = True
 
@@ -60,7 +60,7 @@ def _as_tuple_int(values: list[int] | tuple[int, ...]) -> tuple[int, ...]:
 
 def load_config(config_path: str | None = None) -> Config:
     resolved = Path(config_path or os.getenv("FORECASTING_CONFIG_PATH", "config/default.toml"))
-    data: dict[str, object] = {}
+    data: dict[str, Any] = {}
 
     if resolved.exists():
         with resolved.open("rb") as f:
@@ -76,7 +76,7 @@ def load_config(config_path: str | None = None) -> Config:
             data[key] = value
 
     if "forecast_horizons" in data and data["forecast_horizons"] is not None:
-        data["forecast_horizons"] = _as_tuple_int(data["forecast_horizons"])  # type: ignore[arg-type]
+        data["forecast_horizons"] = _as_tuple_int(data["forecast_horizons"])
 
     if "run_id" not in data or not data["run_id"]:
         data["run_id"] = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")

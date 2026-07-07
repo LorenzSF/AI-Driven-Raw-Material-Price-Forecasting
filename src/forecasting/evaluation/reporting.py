@@ -42,7 +42,8 @@ def write_markdown_report(
         f.write("## DoubleML screening (Option A, ATE)\n")
         if dml_results.empty:
             f.write(
-                "- DoubleML results not produced (package missing or insufficient data after alignment).\n\n"
+                "- DoubleML results not produced "
+                "(package missing or insufficient data after alignment).\n\n"
             )
         else:
             f.write("- DoubleML results: `05_doubleml/doubleml_results.csv`\n")
@@ -58,13 +59,15 @@ def write_markdown_report(
             f.write("\n\n")
         else:
             f.write(
-                "- No forecast results produced. Check that engineered features and target overlap sufficiently.\n\n"
+                "- No forecast results produced. "
+                "Check that engineered features and target overlap sufficiently.\n\n"
             )
 
         f.write("## Plots\n")
         f.write("- Raw indicators subset: `01_raw_plots/raw_indicators_subset.png`\n")
         f.write(
-            "- Engineered indicators subset: `02_engineered_plots/engineered_indicators_subset.png`\n"
+            "- Engineered indicators subset: "
+            "`02_engineered_plots/engineered_indicators_subset.png`\n"
         )
         f.write("- Target splits: `06_forecasts/target_train_test_splits.png`\n")
         f.write("- Sensitivity curves: `05_doubleml/causal_curves/pdp_sensitivity_h1.png`\n")

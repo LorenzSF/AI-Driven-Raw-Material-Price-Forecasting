@@ -4,7 +4,7 @@ from forecasting.features import engineer_features
 
 
 def test_engineer_features_generates_expected_columns():
-    idx = pd.date_range("2020-01-31", periods=15, freq="M")
+    idx = pd.date_range("2020-01-31", periods=15, freq="ME")
     panel = pd.DataFrame(
         {
             "target_price": range(15),

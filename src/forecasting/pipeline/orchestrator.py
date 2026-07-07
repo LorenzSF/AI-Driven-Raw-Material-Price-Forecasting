@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import warnings
+from typing import Any, Callable
 
 import pandas as pd
 from sklearn.base import RegressorMixin
@@ -159,7 +160,7 @@ def run_pipeline(cfg: Config) -> str:
         except Exception:
             return model_linear()
 
-    model_variants = {
+    model_variants: dict[str, tuple[Callable[[], RegressorMixin], list[str]]] = {
         "linear_baseline": (model_linear, selected_features),
         "tree_no_causal": (model_xgb, selected_features),
         "tree_causal_shortlist": (model_xgb, shortlisted_features),
@@ -167,11 +168,11 @@ def run_pipeline(cfg: Config) -> str:
 
     ensure_dir(os.path.join(cfg.output_dir, "06_forecasts"))
 
-    comparison_rows = []
+    comparison_rows: list[dict[str, Any]] = []
     final_models: dict[int, tuple[RegressorMixin, pd.DataFrame, str]] = {}
 
     for h in cfg.forecast_horizons:
-        horizon_variant_rows = []
+        horizon_variant_rows: list[dict[str, Any]] = []
 
         for variant_name, (factory, feat_cols) in model_variants.items():
             X, y = make_supervised(engineered_panel, target_col, feat_cols, horizon=h)
@@ -202,8 +203,8 @@ def run_pipeline(cfg: Config) -> str:
             )
 
         if horizon_variant_rows:
-            best = sorted(horizon_variant_rows, key=lambda r: r["RMSE"])[0]
-            best_variant = best["variant"]
+            best = sorted(horizon_variant_rows, key=lambda r: float(r["RMSE"]))[0]
+            best_variant = str(best["variant"])
             best_factory, best_feats = model_variants[best_variant]
 
             X_best, y_best = make_supervised(engineered_panel, target_col, best_feats, horizon=h)

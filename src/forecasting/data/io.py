@@ -39,10 +39,11 @@ def coerce_datetime(s: pd.Series) -> pd.Series:
 
 
 def to_monthly(df: pd.DataFrame, how: str = "last") -> pd.DataFrame:
+    freq = "ME"
     if how == "last":
-        return df.resample("M").last()
+        return df.resample(freq).last()
     if how == "mean":
-        return df.resample("M").mean()
+        return df.resample(freq).mean()
     raise ValueError(f"Unsupported monthly aggregation: {how}")
 
 
