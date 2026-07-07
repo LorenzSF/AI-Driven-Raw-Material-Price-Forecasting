@@ -1,0 +1,24 @@
+data_dir = "data"
+indicators_file = "master_data.parquet"
+target_file = "target_price.parquet"
+
+start_date = "2010-01-01"
+end_date = "2025-12-31"
+monthly_rule = "M"
+
+forecast_horizons = [1, 3, 6]
+
+lag_months_min = 0
+lag_months_max = 12
+corr_threshold = 0.9
+
+n_splits = 6
+min_train_months = 60
+max_indicators_to_plot = 24
+
+output_root = "outputs/runs"
+
+random_state = 42
+impute_ffill = true
+impute_time_interp = true
+treat_zero_as_missing_for_indicators = true
